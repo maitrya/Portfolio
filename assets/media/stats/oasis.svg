@@ -16,8 +16,8 @@
     <circle cx="660" cy="280" r="4" fill="#d4a847" fill-opacity="0.6"/>
     <circle cx="740" cy="130" r="6" fill="#d4a847" fill-opacity="0.85"/>
   </g>
-  <text x="40" y="78" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="4" fill="#888a82">EX / 04</text>
-  <text x="760" y="78" font-family="'JetBrains Mono', monospace" font-size="14" fill="#888a82" text-anchor="end">2023 – 2024</text>
+  <text x="40" y="78" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="4" fill="#888a82">EX / 05</text>
+  <text x="760" y="78" font-family="'JetBrains Mono', monospace" font-size="14" fill="#888a82" text-anchor="end">Jan – Apr 2025</text>
   <text x="40" y="118" font-family="Inter, sans-serif" font-size="13" letter-spacing="3" fill="#888a82">OASIS · STARTMATE</text>
   <text x="40" y="340" font-family="Fraunces, Georgia, serif" font-size="96" font-style="italic" font-weight="500" fill="#d4a847">W24 + S25</text>
   <text x="40" y="410" font-family="Fraunces, Georgia, serif" font-size="30" fill="#f0ede4">two Startmate cohorts as Founder</text>
