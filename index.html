@@ -451,17 +451,10 @@
       box-shadow: var(--shadow-card);
       overflow: hidden;
       cursor: pointer;
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
       display: flex;
       flex-direction: column;
-      will-change: transform;
+      will-change: transform, opacity;
     }
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
-      box-shadow: 0 1px 2px rgba(10,10,10,0.04), 0 18px 36px rgba(168,132,44,0.12);
-    }
-    .card.hidden { display: none; }
 
     .card-thumb {
       position: relative;
@@ -952,14 +945,278 @@
       .ticker-track { animation: none; }
       .status-dot { animation: none; }
     }
+
+    /* ============ SCROLL PROGRESS ============ */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), color-mix(in oklab, var(--accent) 60%, #e0a030));
+      z-index: 100;
+      width: 0%;
+      pointer-events: none;
+    }
+
+    /* ============ NAV LINKS + DROPDOWNS ============ */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 18px;
+    }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      border-radius: 8px;
+      transition: all .15s ease;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--bg-elev); }
+    .nav-link .dd-arrow { width: 10px; height: 10px; transition: transform .2s ease; }
+    .nav-item:hover .dd-arrow,
+    .nav-item.open .dd-arrow { transform: rotate(180deg); }
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      min-width: 240px;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sheet);
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .2s cubic-bezier(.2,.8,.2,1);
+      z-index: 100;
+    }
+    .nav-item:hover .nav-dropdown,
+    .nav-item.open .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown a, .nav-dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--ink-muted);
+      border-radius: 8px;
+      transition: all .12s ease;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-dropdown a:hover, .nav-dropdown button:hover {
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .nav-dropdown .dd-icon {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 7px;
+      background: var(--bg-elev);
+      border: 1px solid var(--line-soft);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .nav-dropdown .dd-label { flex: 1; }
+    .nav-dropdown .dd-label small {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin-top: 1px;
+    }
+    .nav-dropdown .dd-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--ink-soft);
+    }
+    .nav-dropdown .dd-sep {
+      height: 1px;
+      background: var(--line-soft);
+      margin: 4px 10px;
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+    }
+
+    /* ============ CARD MOUSE GLOW ============ */
+    .card { position: relative; }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      opacity: 0;
+      transition: opacity .3s ease;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(500px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(168,132,44,0.07), transparent 40%);
+    }
+    .card:hover::before { opacity: 1; }
+    [data-theme="dark"] .card::before {
+      background: radial-gradient(500px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(212,168,71,0.08), transparent 40%);
+    }
+
+    /* ============ STAGGERED CARD ENTRANCE ============ */
+    .card {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .card.card-visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1), border-color .2s ease, box-shadow .2s ease;
+    }
+    .card.card-visible:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 1px 2px rgba(10,10,10,0.04), 0 18px 36px rgba(168,132,44,0.12);
+    }
+    .card.hidden { display: none; }
+
+    /* ============ GRADIENT SECTION BORDERS ============ */
+    .sec-head {
+      border-bottom: none;
+      position: relative;
+    }
+    .sec-head::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), var(--line) 60%, transparent);
+    }
+
+    /* ============ HERO META INTERACTIVE ============ */
+    .hero-meta {
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .hero-meta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(10,10,10,0.08), 0 20px 40px rgba(168,132,44,0.1);
+    }
+    .hero-meta-row {
+      transition: background .15s ease;
+      padding: 4px 8px;
+      margin: -4px -8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .hero-meta-row:hover { background: var(--accent-soft); }
+    .hero-meta-row a {
+      display: contents;
+    }
+
+    /* ============ BUTTON SHINE ============ */
+    .btn.primary {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn.primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left .6s ease;
+    }
+    .btn.primary:hover::before { left: 120%; }
+
+    /* ============ CLICKABLE TICKER ============ */
+    .ticker-item {
+      cursor: pointer;
+      transition: color .15s ease;
+    }
+    .ticker-item:hover { color: var(--accent); }
+    .ticker-item:hover strong { color: var(--accent); }
+
+    /* ============ ANIMATED GRADIENT BORDER ON CONTACT ============ */
+    .contact-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* ============ FLOATING BADGE / GRAIN ============ */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.018;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ============ EDUCATION BADGE ============ */
+    .edu-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .edu-badge {
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: var(--bg-elev);
+    }
   </style>
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <!-- ============ HEADER ============ -->
 <header class="top">
   <div class="top-row">
-    <a class="brand" href="#top">Maitrya <em>Anupam</em></a>
+    <div style="display:flex;align-items:center;">
+      <a class="brand" href="#top">Maitrya <em>Anupam</em></a>
+      <nav class="nav-links">
+        <a class="nav-link" href="#about">About</a>
+        <div class="nav-item">
+          <button class="nav-link">Work <svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="nav-dropdown">
+            <button data-filter="all"><span class="dd-icon">*</span><span class="dd-label">All Projects<small>Everything in one view</small></span><span class="dd-count" id="dd-all"></span></button>
+            <div class="dd-sep"></div>
+            <button data-filter="modelling"><span class="dd-icon">$</span><span class="dd-label">Modelling<small>DCF, M&amp;A, 3-statement</small></span><span class="dd-count" id="dd-modelling"></span></button>
+            <button data-filter="wealth"><span class="dd-icon">W</span><span class="dd-label">Wealth &amp; Corp Finance<small>PWM, capital structure</small></span><span class="dd-count" id="dd-wealth"></span></button>
+            <button data-filter="derivatives"><span class="dd-icon">D</span><span class="dd-label">Derivatives &amp; Risk<small>Hedging, exotic options, VaR</small></span><span class="dd-count" id="dd-derivatives"></span></button>
+            <button data-filter="alternatives"><span class="dd-icon">A</span><span class="dd-label">Alternatives &amp; ESG<small>Multi-asset, sustainable</small></span><span class="dd-count" id="dd-alternatives"></span></button>
+            <button data-filter="frameworks"><span class="dd-icon">F</span><span class="dd-label">Frameworks<small>Term sheets, study systems</small></span><span class="dd-count" id="dd-frameworks"></span></button>
+            <button data-filter="ai"><span class="dd-icon">AI</span><span class="dd-label">Applied AI<small>Automation, ML, ethics</small></span><span class="dd-count" id="dd-ai"></span></button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button class="nav-link">Experience <svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="nav-dropdown" id="expDropdown">
+          </div>
+        </div>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
+    </div>
 
     <div class="search-wrap">
       <button class="search" id="searchBtn" aria-label="Open search">
@@ -1013,23 +1270,28 @@
       </div>
     </div>
     <aside class="hero-meta reveal">
-      <div class="hero-meta-row">
+      <div class="hero-meta-row" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
         <div class="hero-meta-key">Based</div>
         <div class="hero-meta-val">Sydney, AU</div>
       </div>
-      <div class="hero-meta-row">
+      <div class="hero-meta-row" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
         <div class="hero-meta-key">Education</div>
-        <div class="hero-meta-val">UTS Master of Finance <span class="sub">&middot; GPA 6.4/7</span></div>
+        <div class="hero-meta-val">UTS Master of Finance <span class="sub">&middot; GPA 6.4/7</span>
+          <div class="edu-badges">
+            <span class="edu-badge">Heritage IT &middot; BTech</span>
+            <span class="edu-badge">Startmate Fellow</span>
+          </div>
+        </div>
       </div>
-      <div class="hero-meta-row">
+      <div class="hero-meta-row" onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})">
         <div class="hero-meta-key">Credentials</div>
         <div class="hero-meta-val">CAIA L1 <span class="sub">&middot; L2 candidate &middot; CFA L1 candidate</span></div>
       </div>
-      <div class="hero-meta-row">
+      <div class="hero-meta-row" data-open-ex="1" style="cursor:pointer">
         <div class="hero-meta-key">Now</div>
-        <div class="hero-meta-val">Trading Ops &middot; Afterprime <span class="sub">&middot; Jan&nbsp;2026&ndash;Now</span></div>
+        <div class="hero-meta-val">AI Consultant &middot; Prepped Talent <span class="sub">&middot; Apr&nbsp;2026&ndash;Now</span><br>Trading Ops &middot; Afterprime <span class="sub">&middot; Jan&nbsp;2026&ndash;Now</span></div>
       </div>
-      <div class="hero-meta-row">
+      <div class="hero-meta-row" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
         <div class="hero-meta-key">Mandate</div>
         <div class="hero-meta-val">Analyst &amp; Associate &middot; IM, M&amp;A, Corp Dev</div>
       </div>
@@ -1048,7 +1310,7 @@
   </div>
   <div class="about-grid">
     <p>My work sits at the boundary between investment analysis and applied data engineering. I read the same primary sources, models, and disclosures any analyst would &mdash; and then I build the pipelines that surface what matters faster than spreadsheets can.</p>
-    <p>I'm a <strong>UTS Master of Finance</strong> graduate (Dec 2024, GPA 6.4/7) with an undergraduate engineering background, and a <strong>two-time Startmate Student Fellow</strong>. Industry experience spans equity research at Maqro Capital (42 ASX reports), wealth management at Atlassio Capital Partners (HNW coverage), and currently Afterprime trading ops &mdash; leading a cross-functional P&amp;L attribution build and shipping Python automation that cut cycle time by ~50%.</p>
+    <p>I'm a <strong>UTS Master of Finance</strong> graduate (Dec 2024, GPA 6.4/7) with an undergraduate <strong>BTech in Engineering</strong> from Heritage Institute of Technology, and a <strong>two-time Startmate Student Fellow</strong>. Currently an AI Consultant at Prepped Talent and Trading Operations Specialist at Afterprime. Prior experience spans equity research at Maqro Capital (42 ASX reports), wealth management at Atlassio Capital Partners (HNW coverage), and founding Oasis &mdash; a Startmate-backed quick-commerce venture.</p>
   </div>
 </section>
 
@@ -1057,7 +1319,7 @@
   <div class="sec-head">
     <div>
       <div class="label">02 &mdash; Selected Work &amp; Experience</div>
-      <h2>Nineteen projects &middot; six roles &middot; filterable.</h2>
+      <h2>Nineteen projects &middot; seven roles &middot; filterable.</h2>
     </div>
     <div class="count" id="workCount">&mdash;</div>
   </div>
@@ -1220,29 +1482,33 @@ const DATA = [
     tags:['Applied AI','Insurtech','Algorithmic bias','AI governance','Fintech'] },
 
   // Experience
-  { kind:'ex', num:'EX / 01', cat:'experience', thumb:'assets/media/stats/afterprime.svg', title:'Afterprime · Trading Operations Specialist', org:'Institutional multi-asset · FX, crypto, commodities, futures', year:'Jan 2026 – Now',
+  { kind:'ex', num:'EX / 01', cat:'experience', thumb:'assets/media/stats/prepped.svg', title:'Prepped Talent · AI Consultant', org:'Applied AI · Recruitment technology · Sydney', year:'Apr 2026 – Now',
+    desc:'Consulting on AI strategy and implementation for a recruitment technology platform. Designing and deploying AI-powered workflows including candidate matching, resume parsing, and automated screening pipelines. Bridging technical AI capabilities with business-level hiring outcomes.',
+    tags:['AI consulting','Recruitment tech','Workflow automation','Applied AI'] },
+
+  { kind:'ex', num:'EX / 02', cat:'experience', thumb:'assets/media/stats/afterprime.svg', title:'Afterprime · Trading Operations Specialist', org:'Institutional multi-asset · FX, crypto, commodities, futures', year:'Jan 2026 – Now',
     desc:'Day-to-day operational ownership across a live institutional book — reconciliation, break investigation, position integrity, and resolution of margin / cash / settlement discrepancies before end-of-day cutoff. Leading a cross-functional P&L attribution and revenue-reporting build with the trading and finance desks, owning the recurring deliverable end-to-end. Expanded into LP performance work (venue-level spread, fill quality, retention) and live exposure monitoring. Built Python agents and reconciliation workflows that cut cycle time by ~50%; mentor newer ops hires through the SOPs adopted across the team.',
     tags:['Trade ops','LP & exposure','P&L attribution','FX · crypto · futures','Python ~50% faster','Cross-functional lead'] },
 
-  { kind:'ex', num:'EX / 02', cat:'experience', thumb:'assets/media/stats/indep-quant.svg', title:'Independent · Quantitative Trader', org:'Derivatives strategies · Equity & FX markets', year:'Jun 2024 – Now',
+  { kind:'ex', num:'EX / 03', cat:'experience', thumb:'assets/media/stats/indep-quant.svg', title:'Independent · Quantitative Trader', org:'Derivatives strategies · Equity & FX markets', year:'Jun 2024 – Now',
     desc:'Designed and back-tested derivatives trading strategies across equity and FX markets using Python (pandas, numpy) and FactSet data — improved Sharpe ratio by 18% on the deployed strategy set. Built VaR and PnL attribution models to monitor portfolio exposure and daily position risk. Analysed transaction and market-microstructure data for liquidity, volatility, and information-response patterns. Developed Python scripts and AI agents to automate reconciliation and flag breaks across trade, margin, and cash settlement.',
     tags:['Quant trading','Python · FactSet','Back-testing','VaR · PnL','18% Sharpe'] },
 
-  { kind:'ex', num:'EX / 03', cat:'experience', thumb:'assets/media/stats/atlassio.svg', title:'Atlassio Capital Partners · Wealth Management Intern', org:'Private wealth · APRA / ASIC compliance', year:'Jun – Nov 2025',
+  { kind:'ex', num:'EX / 04', cat:'experience', thumb:'assets/media/stats/atlassio.svg', title:'Atlassio Capital Partners · Wealth Management Intern', org:'Private wealth · APRA / ASIC compliance', year:'Jun – Nov 2025',
     desc:'Supported senior relationship managers servicing 15+ high-net-worth client mandates — daily portfolio summaries, asset-allocation reviews, credit exposure reports tailored to client risk profiles. Identified 3 liquidity-risk and capital-adequacy issues and prepared written escalation briefs that informed rebalancing decisions.',
     tags:['Wealth management','HNW coverage','Portfolio summaries','Regulatory compliance'] },
 
-  { kind:'ex', num:'EX / 04', cat:'experience', thumb:'assets/media/stats/oasis.svg', title:'Oasis · Founder & CEO', org:'Startmate accelerator (W24 + S25) · Hyperlocal quick-commerce', year:'2023 – 2024',
-    desc:'Founded and led a hyperlocal quick-commerce platform accepted into Startmate — Australia\'s most competitive early-stage programme — across two cohorts. Built investor pitch materials, financial models, and go-to-market strategy from inception; negotiated commercial terms with 20+ retail and logistics partners; presented strategy and performance to Startmate\'s investor network.',
-    tags:['Startmate (x2)','Financial modelling','Investor pitch','Partnership negotiation'] },
+  { kind:'ex', num:'EX / 05', cat:'experience', thumb:'assets/media/stats/oasis.svg', title:'Oasis · Founder & CEO', org:'Startmate accelerator · Hyperlocal quick-commerce', year:'Jan – Apr 2025',
+    desc:'Founded a hyperlocal quick-commerce platform accepted into Startmate — Australia\'s most competitive early-stage accelerator. Built financial models, investor pitch materials, and commercial partnership agreements from inception. Managed 20+ commercial partner relationships and presented company financials and growth strategy to Startmate\'s institutional investor network — securing commercial commitments and advancing to the accelerator\'s demo day cohort.',
+    tags:['Startmate','Financial modelling','Investor pitch','Partnership negotiation'] },
 
-  { kind:'ex', num:'EX / 05', cat:'experience', thumb:'assets/media/stats/maqro.svg', title:'Maqro Capital · Equity Research Analyst', org:'ASX equity research · Institutional & retail coverage', year:'Mar – Apr 2024',
+  { kind:'ex', num:'EX / 06', cat:'experience', thumb:'assets/media/stats/maqro.svg', title:'Maqro Capital · Equity Research Analyst', org:'ASX equity research · Institutional & retail coverage', year:'Mar – Apr 2024',
     desc:'Authored 42 equity research reports on ASX-listed companies for institutional and retail clients — financial-statement analysis, corporate-action monitoring, sector developments, translated into structured investment recommendations. Tracked macro developments and quantified earnings sensitivity, flagging 4 high-risk positions ahead of market moves.',
     tags:['Equity research','ASX coverage','42 reports','Sector analysis'] },
 
-  { kind:'ex', num:'EX / 06', cat:'experience', thumb:'assets/media/stats/uts-ra.svg', title:'UTS Business School · Research Assistant', org:'Academic research · Python + SQL data engineering', year:'Nov 2023 – Aug 2025',
-    desc:'Constructed a 500-firm Canadian mining database and a 10-year, 29-state Indian insurance dataset using Python and SQL — delivered under tight academic deadlines. Prepared structured data summaries and research briefs for academic publication.',
-    tags:['Python · SQL','Academic research','Dataset construction'] },
+  { kind:'ex', num:'EX / 07', cat:'experience', thumb:'assets/media/stats/uts-ra.svg', title:'UTS Business School · Research Assistant', org:'Academic research · Python + SQL data engineering', year:'Nov 2023 – Nov 2025',
+    desc:'Constructed a 500-firm Canadian mining database and a 10-year, 29-state Indian insurance panel dataset using Python and SQL — delivering clean, publication-ready datasets that directly contributed to two peer-reviewed academic research papers. Conducted extensive financial statement analysis and forensic accounting using LSEG, Bloomberg, and FactSet.',
+    tags:['Python · SQL','Academic research','Dataset construction','Bloomberg · FactSet'] },
 ];
 
 /* ============ TICKER ============ */
@@ -1254,7 +1520,7 @@ const TICKER_ITEMS = [
   ['CSL outperf','5%','vs consensus'],
   ['Projects','19','selected work'],
   ['Cycle time','-50%','Afterprime ops'],
-  ['Roles','6','industry tenures'],
+  ['Roles','7','industry tenures'],
 ];
 function buildTicker(){
   const track = document.getElementById('tickerTrack');
@@ -1308,9 +1574,11 @@ function applyFilter(){
     const cat = c.getAttribute('data-cat');
     const show = activeFilter === 'all' || cat === activeFilter;
     c.classList.toggle('hidden', !show);
+    if(!show) { c.classList.remove('card-visible'); c.style.transitionDelay = ''; }
     if(show) shown++;
   });
   workCount.textContent = shown + ' of ' + DATA.length + ' showing';
+  if(typeof staggerCards === 'function') staggerCards();
 }
 function updateChipCounts(){
   const counts = { all: DATA.length };
@@ -1510,8 +1778,129 @@ openSheet = function(idx){
   sheetBody.appendChild(shareBtn);
 };
 
+/* ============ SCROLL PROGRESS BAR ============ */
+const progressBar = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (scrollTop / docHeight * 100) + '%';
+}, { passive: true });
+
+/* ============ CARD STAGGER ANIMATION ============ */
+function staggerCards(){
+  const cards = document.querySelectorAll('.card:not(.hidden):not(.card-visible)');
+  const cardObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const allVisible = document.querySelectorAll('.card:not(.hidden)');
+        const arr = Array.from(allVisible);
+        const idx = arr.indexOf(e.target);
+        const col = idx % 3;
+        e.target.style.transitionDelay = (col * 0.08) + 's';
+        e.target.classList.add('card-visible');
+        cardObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  cards.forEach(c => cardObserver.observe(c));
+}
+
+/* ============ CARD MOUSE GLOW ============ */
+function initCardGlow(){
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+    });
+  });
+}
+
+/* ============ NAV DROPDOWN WIRING ============ */
+function initNavDropdowns(){
+  // Work category dropdown buttons
+  document.querySelectorAll('.nav-dropdown button[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.getAttribute('data-filter');
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.getAttribute('data-filter') === activeFilter));
+      applyFilter();
+      staggerCards();
+      document.getElementById('work').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  // Populate dropdown counts
+  const counts = { all: DATA.length };
+  DATA.forEach(d => counts[d.cat] = (counts[d.cat]||0)+1);
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('dd-'+k);
+    if(el) el.textContent = counts[k];
+  });
+  // Experience dropdown
+  const expDD = document.getElementById('expDropdown');
+  if(expDD){
+    const exItems = DATA.filter(d => d.kind === 'ex');
+    expDD.innerHTML = exItems.map((d, i) => {
+      const idx = DATA.indexOf(d);
+      const shortTitle = d.title.split('·')[0].trim();
+      const role = d.title.split('·')[1] ? d.title.split('·')[1].trim() : '';
+      return '<button data-open-idx="' + idx + '">' +
+        '<span class="dd-icon">' + d.num.replace('EX / ','') + '</span>' +
+        '<span class="dd-label">' + shortTitle + '<small>' + role + '</small></span>' +
+        '<span class="dd-count">' + d.year + '</span></button>';
+    }).join('');
+    expDD.querySelectorAll('button[data-open-idx]').forEach(btn => {
+      btn.addEventListener('click', () => openSheet(+btn.getAttribute('data-open-idx')));
+    });
+  }
+}
+
+/* ============ CLICKABLE TICKER ============ */
+function initTickerClicks(){
+  const tickerMap = {
+    'ASX coverage': 'EX / 06',
+    'Pipeline': 'SI / 05',
+    'Sharpe lift': 'EX / 03',
+    'Risk cut': 'SI / 08',
+    'CSL outperf': 'SI / 03',
+    'Projects': null,
+    'Cycle time': 'EX / 02',
+    'Roles': null,
+  };
+  document.querySelectorAll('.ticker-item').forEach(item => {
+    const label = item.querySelector('strong')?.textContent;
+    const target = tickerMap[label];
+    if(target){
+      item.addEventListener('click', () => {
+        const idx = DATA.findIndex(d => d.num === target);
+        if(idx >= 0) openSheet(idx);
+      });
+    } else if(label === 'Projects' || label === 'Roles'){
+      item.addEventListener('click', () => {
+        document.getElementById('work').scrollIntoView({behavior:'smooth'});
+      });
+    }
+  });
+}
+
+/* ============ HERO META CLICKS ============ */
+function initHeroMetaClicks(){
+  document.querySelectorAll('[data-open-ex]').forEach(row => {
+    row.addEventListener('click', () => {
+      const exNum = row.getAttribute('data-open-ex');
+      const target = 'EX / 0' + exNum;
+      const idx = DATA.findIndex(d => d.num === target);
+      if(idx >= 0) openSheet(idx);
+    });
+  });
+}
+
 /* INIT */
 renderGrid();
+staggerCards();
+initCardGlow();
+initNavDropdowns();
+initTickerClicks();
+initHeroMetaClicks();
 // resolve deeplink AFTER grid renders so DATA + handlers are wired
 setTimeout(resolveDeeplink, 50);
 </script>
