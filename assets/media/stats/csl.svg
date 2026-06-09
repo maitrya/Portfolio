@@ -2,20 +2,40 @@
   <defs>
     <linearGradient id="bg-csl" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0a0a0c"/>
-      <stop offset="1" stop-color="#15151a"/>
+      <stop offset="1" stop-color="#12121a"/>
     </linearGradient>
-    <pattern id="dots-csl" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
-      <circle cx="1" cy="1" r="1" fill="#d4a847" fill-opacity="0.10"/>
+    <pattern id="grid-csl" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#d4a847" stroke-opacity="0.04" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="800" height="600" fill="url(#bg-csl)"/>
-  <rect x="460" y="80" width="280" height="440" fill="url(#dots-csl)"/>
-  
+  <rect width="800" height="600" fill="url(#grid-csl)"/>
+  <g transform="translate(520,260)">
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#d4a847" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="0" cy="0" r="100" fill="none" stroke="#d4a847" stroke-opacity="0.12" stroke-width="1"/>
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#d4a847" stroke-opacity="0.18" stroke-width="1"/>
+    <circle cx="0" cy="-100" r="5" fill="#d4a847" fill-opacity="0.5"/>
+    <circle cx="87" cy="-50" r="5" fill="#d4a847" fill-opacity="0.4"/>
+    <circle cx="87" cy="50" r="5" fill="#d4a847" fill-opacity="0.4"/>
+    <circle cx="0" cy="100" r="5" fill="#d4a847" fill-opacity="0.5"/>
+    <circle cx="-87" cy="50" r="5" fill="#d4a847" fill-opacity="0.3"/>
+    <circle cx="-87" cy="-50" r="5" fill="#d4a847" fill-opacity="0.3"/>
+    <circle cx="50" cy="-87" r="4" fill="#d4a847" fill-opacity="0.25"/>
+    <circle cx="-50" cy="-87" r="4" fill="#d4a847" fill-opacity="0.25"/>
+    <circle cx="100" cy="0" r="4" fill="#d4a847" fill-opacity="0.3"/>
+    <circle cx="-100" cy="0" r="4" fill="#d4a847" fill-opacity="0.3"/>
+    <circle cx="50" cy="87" r="4" fill="#d4a847" fill-opacity="0.25"/>
+    <circle cx="-50" cy="87" r="4" fill="#d4a847" fill-opacity="0.25"/>
+    <circle cx="30" cy="-52" r="3" fill="#d4a847" fill-opacity="0.2"/>
+    <circle cx="-30" cy="52" r="3" fill="#d4a847" fill-opacity="0.2"/>
+    <circle cx="0" cy="0" r="10" fill="#d4a847" fill-opacity="0.25"/>
+  </g>
   <text x="40" y="78" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="4" fill="#888a82">SI / 03</text>
   <text x="760" y="78" font-family="'JetBrains Mono', monospace" font-size="14" fill="#888a82" text-anchor="end">2024</text>
-  <text x="40" y="118" font-family="Inter, sans-serif" font-size="13" letter-spacing="3" fill="#888a82">CSL LIMITED · ASX BIO</text>
-  <text x="40" y="370" font-family="Fraunces, Georgia, serif" font-size="170" font-style="italic" font-weight="500" fill="#d4a847">+5%</text>
-  <text x="40" y="440" font-family="Fraunces, Georgia, serif" font-size="30" fill="#f0ede4">outperformance vs consensus</text>
+  <text x="40" y="118" font-family="Inter, sans-serif" font-size="13" letter-spacing="3" fill="#888a82">CSL LIMITED · EQUITY VALUATION</text>
+  <text x="40" y="300" font-family="Fraunces, Georgia, serif" font-size="70" font-style="italic" font-weight="500" fill="#d4a847">5% beat</text>
+  <text x="40" y="365" font-family="Fraunces, Georgia, serif" font-size="28" fill="#f0ede4">vs market consensus · sell rec</text>
+  <text x="40" y="420" font-family="Inter, sans-serif" font-size="16" fill="#aaa8a0">16-name biotech peer set · 9yr FactSet data</text>
   <line x1="40" y1="540" x2="500" y2="540" stroke="#d4a847" stroke-opacity="0.5" stroke-width="1"/>
-  <text x="40" y="568" font-family="Inter, sans-serif" font-size="13" letter-spacing="1" fill="#aaa8a0">DCF · relative valuation · team of 5</text>
+  <text x="40" y="568" font-family="Inter, sans-serif" font-size="13" letter-spacing="1" fill="#aaa8a0">DCF · relative valuation · EV/EBIT · EV/EBITDA</text>
 </svg>

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-exotic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0c"/>
+      <stop offset="1" stop-color="#0e1015"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg-exotic)"/>
+  <!-- Volatility surface mesh -->
+  <g stroke="#d4a847" fill="none" stroke-opacity="0.12" stroke-width="0.8">
+    <path d="M480,420 Q530,380 580,400 Q630,420 680,390 Q730,360 760,370"/>
+    <path d="M480,380 Q530,340 580,360 Q630,380 680,350 Q730,320 760,330"/>
+    <path d="M480,340 Q530,300 580,320 Q630,340 680,310 Q730,280 760,290"/>
+    <path d="M480,300 Q530,260 580,280 Q630,300 680,270 Q730,240 760,250"/>
+    <path d="M480,260 Q530,220 580,240 Q630,260 680,230 Q730,200 760,210"/>
+    <path d="M480,220 Q530,180 580,200 Q630,220 680,190 Q730,160 760,170"/>
+    <!-- Vertical connections -->
+    <line x1="480" y1="220" x2="480" y2="420"/>
+    <line x1="530" y1="180" x2="530" y2="380"/>
+    <line x1="580" y1="200" x2="580" y2="400"/>
+    <line x1="630" y1="220" x2="630" y2="420"/>
+    <line x1="680" y1="190" x2="680" y2="390"/>
+    <line x1="730" y1="160" x2="730" y2="360"/>
+    <line x1="760" y1="170" x2="760" y2="370"/>
+  </g>
+  <!-- Highlight nodes -->
+  <circle cx="580" cy="280" r="4" fill="#d4a847" fill-opacity="0.5"/>
+  <circle cx="680" cy="230" r="3" fill="#d4a847" fill-opacity="0.4"/>
+  <circle cx="530" cy="260" r="3" fill="#d4a847" fill-opacity="0.3"/>
+  <text x="40" y="78" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="4" fill="#888a82">SI / 10</text>
+  <text x="760" y="78" font-family="'JetBrains Mono', monospace" font-size="14" fill="#888a82" text-anchor="end">2024</text>
+  <text x="40" y="118" font-family="Inter, sans-serif" font-size="13" letter-spacing="3" fill="#888a82">EXOTIC OPTIONS · VOLATILITY</text>
+  <text x="40" y="300" font-family="Fraunces, Georgia, serif" font-size="64" font-style="italic" font-weight="500" fill="#d4a847">$500T</text>
+  <text x="40" y="365" font-family="Fraunces, Georgia, serif" font-size="28" fill="#f0ede4">derivatives market · ML pricing</text>
+  <text x="40" y="420" font-family="Inter, sans-serif" font-size="16" fill="#aaa8a0">LSTM + Gradient Boosting + QAOA overlay</text>
+  <line x1="40" y1="540" x2="460" y2="540" stroke="#d4a847" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="40" y="568" font-family="Inter, sans-serif" font-size="13" letter-spacing="1" fill="#aaa8a0">barrier · lookback · asian · vol surface</text>
+</svg>
