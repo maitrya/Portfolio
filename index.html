@@ -306,6 +306,48 @@
       max-width: var(--max);
       margin: 0 auto;
       padding: clamp(40px, 6vw, 76px) var(--gutter) clamp(28px, 4vw, 52px);
+      position: relative;
+    }
+    .hero-bg-mesh {
+      position: absolute;
+      inset: -40px -60px;
+      z-index: -1;
+      overflow: hidden;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    [data-theme="dark"] .hero-bg-mesh { opacity: 0.35; }
+    .hero-bg-mesh .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orbFloat 12s ease-in-out infinite alternate;
+    }
+    .hero-bg-mesh .orb-1 {
+      width: 360px; height: 360px;
+      background: rgba(168,132,44,0.18);
+      top: -80px; left: -40px;
+      animation-delay: 0s;
+    }
+    .hero-bg-mesh .orb-2 {
+      width: 280px; height: 280px;
+      background: rgba(168,132,44,0.10);
+      bottom: -60px; right: 10%;
+      animation-delay: -4s;
+      animation-duration: 15s;
+    }
+    .hero-bg-mesh .orb-3 {
+      width: 200px; height: 200px;
+      background: rgba(168,132,44,0.08);
+      top: 30%; right: 30%;
+      animation-delay: -8s;
+      animation-duration: 18s;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.95); }
+      100% { transform: translate(15px, -10px) scale(1.02); }
     }
     .hero-grid {
       display: grid;
@@ -436,14 +478,43 @@
       .about-grid { grid-template-columns: 1fr; gap: 18px; }
     }
 
-    /* ============ WORK GRID ============ */
+    /* ============ WORK GRID — BENTO ============ */
     .work-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
       gap: 20px;
     }
-    @media (max-width: 1024px) { .work-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .work-grid { grid-template-columns: 1fr; } }
+    .card.bento-wide { grid-column: span 2; }
+    .card.bento-wide .card-thumb { aspect-ratio: 21 / 9; }
+    .card.bento-tall { grid-row: span 2; }
+    .card.bento-tall .card-thumb { aspect-ratio: 3 / 4; }
+    .card.bento-tall .card-desc { -webkit-line-clamp: 6; line-clamp: 6; }
+    .card.bento-feature {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex-direction: row;
+    }
+    .card.bento-feature .card-thumb {
+      aspect-ratio: unset;
+      min-height: 240px;
+      border-bottom: none;
+      border-right: 1px solid var(--line-soft);
+    }
+    .card.bento-feature .card-desc { -webkit-line-clamp: 5; line-clamp: 5; }
+    @media (max-width: 1024px) {
+      .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .card.bento-feature { grid-template-columns: 1fr; }
+      .card.bento-feature .card-thumb { border-right: none; border-bottom: 1px solid var(--line-soft); min-height: 180px; }
+    }
+    @media (max-width: 640px) {
+      .work-grid { grid-template-columns: 1fr; }
+      .card.bento-wide, .card.bento-feature { grid-column: span 1; }
+      .card.bento-tall { grid-row: span 1; }
+      .card.bento-wide .card-thumb { aspect-ratio: 4/3; }
+      .card.bento-feature { grid-template-columns: 1fr; }
+    }
 
     .card {
       border: 1px solid var(--line);
@@ -567,6 +638,115 @@
     }
     [data-theme="dark"] .card.ex .card-thumb {
       background: linear-gradient(135deg, #1a1a1f 0%, var(--accent) 200%);
+    }
+
+    /* ============ EXPERIENCE TIMELINE ============ */
+    .timeline-section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(40px, 5vw, 64px) var(--gutter);
+    }
+    .timeline {
+      position: relative;
+      padding-left: 48px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--line) 80%, transparent);
+    }
+    .tl-item {
+      position: relative;
+      padding-bottom: 40px;
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+      cursor: pointer;
+    }
+    .tl-item.tl-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute;
+      left: -38px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      z-index: 2;
+      transition: background .2s ease, box-shadow .2s ease;
+    }
+    .tl-item:hover .tl-dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .tl-item.tl-current .tl-dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .tl-item.tl-current .tl-dot::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--bg);
+    }
+    .tl-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .tl-card {
+      padding: 20px 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-card);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    .tl-item:hover .tl-card {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(168,132,44,0.1);
+      transform: translateX(4px);
+    }
+    .tl-card h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .tl-card .org {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+    .tl-card p {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    @media (max-width: 640px) {
+      .timeline { padding-left: 36px; }
+      .timeline::before { left: 12px; }
+      .tl-dot { left: -30px; width: 12px; height: 12px; }
     }
 
     /* ============ WRITING STRIP ============ */
@@ -1253,13 +1433,17 @@
       <button class="chip" data-filter="alternatives">Alternatives &amp; ESG <span class="ct" id="ct-alternatives"></span></button>
       <button class="chip" data-filter="frameworks">Frameworks <span class="ct" id="ct-frameworks"></span></button>
       <button class="chip" data-filter="ai">Applied AI <span class="ct" id="ct-ai"></span></button>
-      <button class="chip" data-filter="experience">Experience <span class="ct" id="ct-experience"></span></button>
     </div>
   </div>
 </header>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="top">
+  <div class="hero-bg-mesh" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
   <div class="hero-grid">
     <div class="reveal">
       <h1>Analysing markets &amp; <em>building</em> the tools that make that work faster.</h1>
@@ -1320,7 +1504,7 @@
   <div class="sec-head">
     <div>
       <div class="label">02 &mdash; Selected Work &amp; Experience</div>
-      <h2>Nineteen projects &middot; seven roles &middot; filterable.</h2>
+      <h2>Nineteen projects &middot; filterable.</h2>
     </div>
     <div class="count" id="workCount">&mdash;</div>
   </div>
@@ -1329,11 +1513,25 @@
   </div>
 </section>
 
+<!-- ============ EXPERIENCE TIMELINE ============ -->
+<section class="timeline-section reveal" id="experience">
+  <div class="sec-head">
+    <div>
+      <div class="label">03 &mdash; Experience</div>
+      <h2>Seven roles &middot; timeline view.</h2>
+    </div>
+    <div class="count" id="expCount">7 roles</div>
+  </div>
+  <div class="timeline" id="timeline">
+    <!-- timeline items injected by JS -->
+  </div>
+</section>
+
 <!-- ============ CONTACT ============ -->
 <section id="contact" class="reveal">
   <div class="contact-card">
     <div>
-      <div class="eyebrow">03 &mdash; Contact</div>
+      <div class="eyebrow">04 &mdash; Contact</div>
       <h2>Open to analyst and associate conversations.</h2>
       <p class="blurb">Sydney-based, willing to travel. Most interested in investment management, M&amp;A, capital markets, and corporate development. Fastest way to reach me is email &mdash; happy to share a long-form CV, memo samples, or model walk-throughs.</p>
       <div class="live-row"><span class="status-dot"></span> Live status &middot; Open to roles &middot; Updated <span id="todayStamp"></span></div>
@@ -1547,29 +1745,74 @@ const grid = document.getElementById('workGrid');
 const workCount = document.getElementById('workCount');
 let activeFilter = 'all';
 
+const BENTO_MAP = {
+  'SI / 01': 'bento-feature',
+  'SI / 03': 'bento-wide',
+  'SI / 08': 'bento-wide',
+  'SI / 10': 'bento-tall',
+  'SI / 17': 'bento-wide',
+};
+
 function cardHTML(d, idx){
+  const bentoClass = BENTO_MAP[d.num] || '';
+  const isFeature = bentoClass === 'bento-feature';
   let thumbHTML;
   if(d.thumb){
     thumbHTML = '<div class="card-thumb"><img src="' + d.thumb + '" alt="" loading="lazy"/><span class="stamp">' + d.num + '</span><span class="year-stamp">' + d.year + '</span></div>';
-  } else if(d.kind === 'ex'){
-    thumbHTML = '<div class="card-thumb"><div class="card-thumb-text">' + d.title.split('·')[0].trim() + '</div><span class="stamp">' + d.num + '</span><span class="year-stamp">' + d.year + '</span></div>';
   } else {
     thumbHTML = '<div class="card-thumb placeholder"><span>' + d.num.replace('SI / ','') + '</span><span class="stamp">' + d.num + '</span><span class="year-stamp">' + d.year + '</span></div>';
   }
-  return '<article class="card' + (d.kind==='ex'?' ex':'') + '" data-idx="' + idx + '" data-cat="' + d.cat + '" tabindex="0">' +
+  return '<article class="card ' + bentoClass + '" data-idx="' + idx + '" data-cat="' + d.cat + '" tabindex="0">' +
     thumbHTML +
     '<div class="card-body"><h3>' + d.title + '</h3><div class="org">' + d.org + '</div>' +
     '<p class="card-desc">' + d.desc + '</p>' +
     '<div class="tags">' + d.tags.slice(0,4).map(t=>'<span class="tag">' + t + '</span>').join('') + '</div></div></article>';
 }
+
 function renderGrid(){
-  grid.innerHTML = DATA.map((d,i)=>cardHTML(d,i)).join('');
+  const siData = DATA.filter(d => d.kind === 'si');
+  grid.innerHTML = siData.map(d => cardHTML(d, DATA.indexOf(d))).join('');
   applyFilter();
   attachCardClicks();
   updateChipCounts();
 }
+
+function renderTimeline(){
+  const tl = document.getElementById('timeline');
+  if(!tl) return;
+  const exData = DATA.filter(d => d.kind === 'ex');
+  tl.innerHTML = exData.map((d, i) => {
+    const idx = DATA.indexOf(d);
+    const isCurrent = d.year.includes('Now');
+    return '<div class="tl-item' + (isCurrent ? ' tl-current' : '') + '" data-idx="' + idx + '">' +
+      '<div class="tl-dot"></div>' +
+      '<div class="tl-year">' + d.year + '</div>' +
+      '<div class="tl-card">' +
+        '<h3>' + d.title + '</h3>' +
+        '<div class="org">' + d.org + '</div>' +
+        '<p>' + d.desc + '</p>' +
+        '<div class="tags">' + d.tags.slice(0,4).map(t=>'<span class="tag">' + t + '</span>').join('') + '</div>' +
+      '</div></div>';
+  }).join('');
+  tl.querySelectorAll('.tl-item').forEach(item => {
+    item.addEventListener('click', () => openSheet(+item.getAttribute('data-idx')));
+  });
+  const tlObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('tl-visible');
+        tlObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  tl.querySelectorAll('.tl-item').forEach((item, i) => {
+    item.style.transitionDelay = (i * 0.1) + 's';
+    tlObserver.observe(item);
+  });
+}
 function applyFilter(){
   const cards = grid.querySelectorAll('.card');
+  const siCount = DATA.filter(d => d.kind === 'si').length;
   let shown = 0;
   cards.forEach(c => {
     const cat = c.getAttribute('data-cat');
@@ -1578,12 +1821,13 @@ function applyFilter(){
     if(!show) { c.classList.remove('card-visible'); c.style.transitionDelay = ''; }
     if(show) shown++;
   });
-  workCount.textContent = shown + ' of ' + DATA.length + ' showing';
+  workCount.textContent = shown + ' of ' + siCount + ' showing';
   if(typeof staggerCards === 'function') staggerCards();
 }
 function updateChipCounts(){
-  const counts = { all: DATA.length };
-  DATA.forEach(d => counts[d.cat] = (counts[d.cat]||0)+1);
+  const siData = DATA.filter(d => d.kind === 'si');
+  const counts = { all: siData.length };
+  siData.forEach(d => counts[d.cat] = (counts[d.cat]||0)+1);
   Object.keys(counts).forEach(k => {
     const el = document.getElementById('ct-'+k);
     if(el) el.textContent = counts[k];
@@ -1897,6 +2141,7 @@ function initHeroMetaClicks(){
 
 /* INIT */
 renderGrid();
+renderTimeline();
 staggerCards();
 initCardGlow();
 initNavDropdowns();
