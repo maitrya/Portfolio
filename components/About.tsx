@@ -23,26 +23,16 @@ export default function About() {
       <div className="sec-head">
         <div>
           <div className="label">01 &mdash; About</div>
-          <h2>Background &amp; approach</h2>
+          <h2>Fundamental research, built on systems I design myself.</h2>
         </div>
+        <div className="count">2 paragraphs</div>
       </div>
       <div className="about-grid">
         <p>
-          I graduated from UTS with a <strong>Master of Finance (6.4 / 7)</strong>,
-          earning a place on the Dean&apos;s List and an Academic Excellence Award.
-          My coursework spanned equity valuation, derivatives pricing,
-          alternative investments, and corporate finance &mdash; every project in
-          this portfolio started as a real assignment and was extended well past
-          the brief.
+          My work sits at the boundary between investment analysis and applied data engineering. I read the same primary sources, models, and disclosures any analyst would &mdash; and then I build the pipelines that surface what matters faster than spreadsheets can.
         </p>
         <p>
-          Outside the classroom I&apos;ve worked across{" "}
-          <strong>institutional trading operations, equity research, private
-          wealth, and quantitative strategy</strong>. I build models in Excel and
-          Python, write research that people actually read, and ship software
-          that connects quantitative analysis with front-office
-          decision-making &mdash; recently using AI agents and MCP tooling to
-          automate entire workflows.
+          I&apos;m a <strong>UTS Master of Finance</strong> graduate (Dec 2024, GPA 6.4/7) with an undergraduate <strong>BTech in Engineering</strong> from Heritage Institute of Technology, and a <strong>two-time Startmate Student Fellow</strong>. Currently an AI Consultant at Prepped Talent and Trading Operations Specialist at Afterprime. Prior experience spans equity research at Maqro Capital (42 ASX reports), wealth management at Atlassio Capital Partners (HNW coverage), and founding Oasis &mdash; a Startmate-backed quick-commerce venture.
         </p>
       </div>
     </motion.section>

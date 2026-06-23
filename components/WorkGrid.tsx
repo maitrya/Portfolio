@@ -45,9 +45,9 @@ export default function WorkGrid({ activeFilter, onOpenSheet }: WorkGridProps) {
       <div className="sec-head">
         <div>
           <div className="label">02 &mdash; Selected Work &amp; Experience</div>
-          <h2>Projects &amp; case studies</h2>
+          <h2>Nineteen projects &middot; filterable.</h2>
         </div>
-        <span className="count">{visible.length} projects</span>
+        <span className="count">{visible.length} of {siItems.length} showing</span>
       </div>
       <div className="work-grid">
         {visible.map((item, i) => {

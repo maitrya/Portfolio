@@ -37,8 +37,7 @@ export default function Hero({ onOpenSheet }: HeroProps) {
             animate="visible"
             custom={0}
           >
-            Analysing markets &amp; <em>building</em> the tools that move
-            capital.
+            Analysing markets &amp; <em>building</em> the tools that make that work faster.
           </motion.h1>
 
           <motion.p
@@ -48,9 +47,7 @@ export default function Hero({ onOpenSheet }: HeroProps) {
             animate="visible"
             custom={1}
           >
-            Finance &amp; applied-AI professional based in Sydney. I build
-            models, write research, and ship software that bridges quantitative
-            analysis with real-world decision-making.
+            Investment analyst at the intersection of fundamental research and applied data engineering. I cover capital markets and alternatives &mdash; and I build the systems behind the analysis, from regulatory pipelines to FX product analytics.
           </motion.p>
 
           <motion.div
@@ -82,28 +79,24 @@ export default function Hero({ onOpenSheet }: HeroProps) {
         >
           <div className="hero-meta-row">
             <span className="hero-meta-key">Based</span>
-            <span className="hero-meta-val">Sydney, Australia</span>
+            <span className="hero-meta-val">Sydney, AU</span>
           </div>
 
           <div className="hero-meta-row">
             <span className="hero-meta-key">Education</span>
             <span className="hero-meta-val">
-              UTS Master of Finance{" "}
-              <span className="sub">6.4 / 7</span>
-              <span className="edu-badges">
-                <span className="edu-badge">Dean&apos;s List</span>
-                <span className="edu-badge">Academic Excellence</span>
-              </span>
+              UTS Master of Finance <span className="sub">&middot; GPA 6.4/7</span>
+              <div className="edu-badges">
+                <span className="edu-badge">Heritage IT &middot; BTech</span>
+                <span className="edu-badge">Startmate Fellow</span>
+              </div>
             </span>
           </div>
 
           <div className="hero-meta-row">
             <span className="hero-meta-key">Credentials</span>
             <span className="hero-meta-val">
-              CAIA Level 1{" "}
-              <span className="sub">
-                &middot; L2 &amp; CFA candidates
-              </span>
+              CAIA L1 <span className="sub">&middot; L2 candidate &middot; CFA L1 candidate</span>
             </span>
           </div>
 
@@ -116,16 +109,15 @@ export default function Hero({ onOpenSheet }: HeroProps) {
           >
             <span className="hero-meta-key">Now</span>
             <span className="hero-meta-val">
-              Prepped Talent{" "}
-              <span className="sub">&middot; Afterprime</span>
+              AI Consultant &middot; Prepped Talent <span className="sub">&middot; Apr&nbsp;2026&ndash;Now</span>
+              <br />
+              Trading Ops &middot; Afterprime <span className="sub">&middot; Jan&nbsp;2026&ndash;Now</span>
             </span>
           </div>
 
           <div className="hero-meta-row">
             <span className="hero-meta-key">Mandate</span>
-            <span className="hero-meta-val">
-              Quantitative &amp; applied-AI roles
-            </span>
+            <span className="hero-meta-val">Analyst &amp; Associate &middot; IM, M&amp;A, Corp Dev</span>
           </div>
         </motion.div>
       </div>
