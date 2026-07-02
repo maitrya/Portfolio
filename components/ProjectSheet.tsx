@@ -4,12 +4,14 @@ import { useEffect, useCallback, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { DATA } from "@/lib/data";
 import type { ProjectItem } from "@/lib/data";
 import { getSlug } from "@/lib/slugs";
 
 interface ProjectSheetProps {
   item: ProjectItem | null;
   onClose: () => void;
+  onNavigate?: (idx: number) => void;
 }
 
 const backdropVariants = {
@@ -34,9 +36,19 @@ const sheetVariants = {
   },
 };
 
-function ProjectSheetInner({ item, onClose }: ProjectSheetProps) {
+function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+
+  const itemIdx = item ? DATA.indexOf(item) : -1;
+  const goPrev = useCallback(() => {
+    if (itemIdx < 0 || !onNavigate) return;
+    onNavigate((itemIdx - 1 + DATA.length) % DATA.length);
+  }, [itemIdx, onNavigate]);
+  const goNext = useCallback(() => {
+    if (itemIdx < 0 || !onNavigate) return;
+    onNavigate((itemIdx + 1) % DATA.length);
+  }, [itemIdx, onNavigate]);
 
   // Update URL when opening a sheet
   useEffect(() => {
@@ -65,16 +77,18 @@ function ProjectSheetInner({ item, onClose }: ProjectSheetProps) {
     };
   }, [item, router]);
 
-  // Close on Escape
+  // Close on Escape, browse with arrow keys
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
     };
     if (item) {
       window.addEventListener("keydown", handleKey);
       return () => window.removeEventListener("keydown", handleKey);
     }
-  }, [item, onClose]);
+  }, [item, onClose, goPrev, goNext]);
 
   const handleShare = useCallback(async () => {
     try {
@@ -194,6 +208,21 @@ function ProjectSheetInner({ item, onClose }: ProjectSheetProps) {
             <button className="sheet-close" onClick={onClose} aria-label="Close">
               &times;
             </button>
+
+            {/* Prev / next browsing */}
+            {onNavigate && itemIdx >= 0 && (
+              <div className="sheet-nav">
+                <button onClick={goPrev} aria-label="Previous project">
+                  &larr;
+                </button>
+                <span className="sheet-nav-count">
+                  {itemIdx + 1} / {DATA.length}
+                </span>
+                <button onClick={goNext} aria-label="Next project">
+                  &rarr;
+                </button>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

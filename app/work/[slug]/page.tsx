@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/lib/data";
-import { getAllSlugs, getItemBySlug, getSlug, getAdjacent } from "@/lib/slugs";
+import { getAllSlugs, getItemBySlug, getSlug, getAdjacent, getRelated } from "@/lib/slugs";
 import DcfSensitivity from "@/components/widgets/DcfSensitivity";
 
 export function generateStaticParams() {
@@ -150,6 +150,23 @@ export default async function CaseStudyPage({
           <a href="mailto:maitryainfinity@gmail.com" className="btn primary">
             Get in touch <span className="arr">&rarr;</span>
           </a>
+        </section>
+
+        <section className="case-related">
+          <div className="case-related-head">More like this</div>
+          <div className="case-related-grid">
+            {getRelated(item).map((rel) => (
+              <Link
+                key={rel.num}
+                href={`/work/${getSlug(rel)}`}
+                className="case-related-card"
+              >
+                <span className="case-related-num">{rel.num}</span>
+                <span className="case-related-title">{rel.title}</span>
+                <span className="case-related-org">{rel.org}</span>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <nav className="case-pager">

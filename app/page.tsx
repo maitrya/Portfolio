@@ -96,7 +96,7 @@ function PortfolioApp() {
           openSheet(idx);
         }}
       />
-      <ProjectSheet item={sheetItem} onClose={closeSheet} />
+      <ProjectSheet item={sheetItem} onClose={closeSheet} onNavigate={openSheet} />
     </>
   );
 }

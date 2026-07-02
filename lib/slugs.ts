@@ -59,3 +59,10 @@ export function getAdjacent(item: ProjectItem): {
   const next = DATA[(idx + 1) % DATA.length];
   return { prev, next };
 }
+
+/** Up to `count` items from the same category, topped up with neighbours. */
+export function getRelated(item: ProjectItem, count = 3): ProjectItem[] {
+  const sameCat = DATA.filter((d) => d !== item && d.cat === item.cat);
+  const others = DATA.filter((d) => d !== item && d.cat !== item.cat);
+  return [...sameCat, ...others].slice(0, count);
+}
