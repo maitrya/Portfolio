@@ -2,8 +2,10 @@
 
 import { useEffect, useCallback, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { ProjectItem } from "@/lib/data";
+import { getSlug } from "@/lib/slugs";
 
 interface ProjectSheetProps {
   item: ProjectItem | null;
@@ -168,6 +170,11 @@ function ProjectSheetInner({ item, onClose }: ProjectSheetProps) {
                   </span>
                 ))}
               </div>
+
+              {/* Full case study */}
+              <Link href={`/work/${getSlug(item)}`} className="sheet-case-link">
+                Open full case study <span className="arr">&rarr;</span>
+              </Link>
 
               {/* Share */}
               <button className="sheet-share" onClick={handleShare}>

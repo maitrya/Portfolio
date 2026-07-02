@@ -973,6 +973,17 @@ footer {
 }
 .sheet-share:hover { color: var(--accent); border-color: var(--accent); }
 .sheet-share svg { width: 13px; height: 13px; }
+.sheet-case-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 12px 12px 0 0; padding: 8px 14px;
+  font-size: 12.5px; font-weight: 500;
+  color: var(--bg); background: var(--ink);
+  border: 1px solid var(--ink); border-radius: 999px;
+  text-decoration: none; transition: all .15s ease;
+}
+.sheet-case-link:hover { background: var(--accent); border-color: var(--accent); }
+.sheet-case-link .arr { transition: transform .15s ease; }
+.sheet-case-link:hover .arr { transform: translateX(2px); }
 .sheet-close {
   position: absolute;
   top: 16px; right: 16px;
@@ -1081,4 +1092,132 @@ body::after {
   .ticker-track { animation: none; }
   .status-dot { animation: none; }
   .hero-bg-mesh .orb { animation: none; }
+}
+
+/* ============ CASE STUDY PAGE ============ */
+.case-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+.case-top {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 880px; margin: 0 auto;
+  padding: 22px var(--gutter);
+}
+.case-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; letter-spacing: 0.04em;
+  color: var(--ink-muted); text-decoration: none;
+  transition: color .15s ease;
+}
+.case-back:hover { color: var(--accent); }
+.case-back.sub { color: var(--ink-soft); }
+.case-main {
+  max-width: 880px; margin: 0 auto;
+  padding: clamp(24px, 6vw, 64px) var(--gutter) 80px;
+}
+.case-meta-row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+.case-num {
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+  background: var(--accent-soft);
+  border-radius: 6px; padding: 3px 10px;
+}
+.case-year { margin-left: auto; }
+.case-head h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(30px, 5.4vw, 52px);
+  font-weight: 600; line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.case-org {
+  font-size: 16px; color: var(--ink-muted);
+  margin: 0 0 18px;
+}
+.case-visual {
+  margin: 36px 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.case-visual img { display: block; width: 100%; height: auto; }
+.case-body { margin-top: 32px; }
+.case-desc {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.75;
+  color: var(--ink-muted);
+  max-width: 68ch;
+  margin: 0 0 32px;
+}
+.case-extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.case-extra {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  padding: 16px 18px;
+}
+.case-extra-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.case-extra p {
+  margin: 0; font-size: 14px; line-height: 1.6;
+  color: var(--ink-muted);
+}
+.case-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.case-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  margin-top: 56px; padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+}
+.case-cta p {
+  margin: 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 19px;
+}
+.case-pager {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-top: 28px;
+}
+.case-pager-link {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--bg-card);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.case-pager-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.case-pager-link.right { text-align: right; align-items: flex-end; }
+.case-pager-dir {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.case-pager-title { font-size: 14px; line-height: 1.4; }
+@media (max-width: 560px) {
+  .case-pager { grid-template-columns: 1fr; }
+  .case-pager-link.right { text-align: left; align-items: flex-start; }
+  .case-year { margin-left: 0; }
 }
