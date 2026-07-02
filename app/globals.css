@@ -1221,3 +1221,141 @@ body::after {
   .case-pager-link.right { text-align: left; align-items: flex-start; }
   .case-year { margin-left: 0; }
 }
+
+/* ============ ROUTE TRANSITIONS ============ */
+.page-enter {
+  animation: page-enter .45s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
+}
+
+/* ============ DCF SENSITIVITY WIDGET ============ */
+/* Always dark, matching the case-visual stat cards, in both themes. */
+.dcf-widget {
+  --dcf-bg: #131318;
+  --dcf-ink: #f3efe5;
+  --dcf-ink-muted: #b5b0a4;
+  --dcf-ink-soft: #7a766c;
+  --dcf-line: rgba(255,255,255,0.10);
+  --dcf-accent: #d4a847;
+  background: var(--dcf-bg);
+  color: var(--dcf-ink);
+  border: 1px solid var(--dcf-line);
+  border-radius: var(--radius);
+  padding: clamp(20px, 3.5vw, 32px);
+  margin: 0 0 36px;
+}
+.dcf-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.dcf-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dcf-accent);
+}
+.dcf-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--dcf-ink-soft);
+}
+.dcf-controls {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  margin-bottom: 24px;
+}
+.dcf-control { display: flex; flex-direction: column; gap: 10px; }
+.dcf-control-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--dcf-ink-muted);
+  display: flex; justify-content: space-between;
+}
+.dcf-control-name strong { color: var(--dcf-ink); font-weight: 500; }
+.dcf-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--dcf-accent);
+  cursor: pointer;
+}
+.dcf-output {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  padding-bottom: 22px; margin-bottom: 22px;
+  border-bottom: 1px solid var(--dcf-line);
+}
+.dcf-hero-wrap { display: flex; flex-direction: column; gap: 4px; }
+.dcf-hero-label {
+  font-size: 12.5px; color: var(--dcf-ink-muted);
+}
+.dcf-hero {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(40px, 6vw, 54px);
+  font-weight: 600; line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.dcf-verdict {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.dcf-delta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13.5px; color: var(--dcf-ink-muted);
+}
+.dcf-dot {
+  display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  flex: none;
+}
+.dcf-rec {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 0.12em;
+  padding: 5px 14px;
+  border: 1px solid var(--dcf-line); border-radius: 999px;
+  color: var(--dcf-ink);
+}
+.dcf-grid-wrap { overflow-x: auto; }
+.dcf-grid {
+  width: 100%; border-collapse: separate; border-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.dcf-grid th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 400;
+  color: var(--dcf-ink-soft);
+  padding: 6px 8px; text-align: center;
+}
+.dcf-grid th[scope="row"] { text-align: right; }
+.dcf-corner { white-space: nowrap; }
+.dcf-grid td {
+  font-size: 13px; text-align: center;
+  color: var(--dcf-ink);
+  padding: 9px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: border-color .12s ease;
+  min-width: 52px;
+}
+.dcf-grid td:hover { border-color: var(--dcf-ink-soft); }
+.dcf-grid td.active { border-color: var(--dcf-accent); }
+.dcf-legend {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  margin-top: 16px;
+  font-size: 12px; color: var(--dcf-ink-muted);
+}
+.dcf-legend > span { display: inline-flex; align-items: center; gap: 7px; }
+.dcf-legend-hint { margin-left: auto; color: var(--dcf-ink-soft); }
+.dcf-foot {
+  margin: 16px 0 0; font-size: 11.5px; line-height: 1.6;
+  color: var(--dcf-ink-soft);
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+@media (max-width: 560px) {
+  .dcf-controls { grid-template-columns: 1fr; gap: 16px; }
+  .dcf-legend-hint { margin-left: 0; width: 100%; }
+}

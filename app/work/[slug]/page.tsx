@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/lib/data";
 import { getAllSlugs, getItemBySlug, getSlug, getAdjacent } from "@/lib/slugs";
+import DcfSensitivity from "@/components/widgets/DcfSensitivity";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -112,6 +113,8 @@ export default async function CaseStudyPage({
 
         <section className="case-body">
           <p className="case-desc">{item.desc}</p>
+
+          {item.num === "SI / 03" && <DcfSensitivity />}
 
           {item.extras && item.extras.length > 0 && (
             <div className="case-extras">
