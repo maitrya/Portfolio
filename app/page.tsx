@@ -3,21 +3,23 @@
 import { Suspense, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { ThemeProvider } from "@/lib/theme";
+import { SettingsProvider } from "@/lib/settings";
 import { DATA } from "@/lib/data";
 import type { ProjectItem } from "@/lib/data";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import WorkGrid from "@/components/WorkGrid";
+import WorkIndex from "@/components/WorkIndex";
 import Timeline from "@/components/Timeline";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ProjectSheet from "@/components/ProjectSheet";
 import CommandPalette from "@/components/CommandPalette";
 import ScrollProgress from "@/components/ScrollProgress";
+import TweakPanel from "@/components/TweakPanel";
+import MotionEffects from "@/components/MotionEffects";
 
 function PortfolioApp() {
-  const [activeFilter, setActiveFilter] = useState("all");
   const [sheetItem, setSheetItem] = useState<ProjectItem | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -26,18 +28,13 @@ function PortfolioApp() {
     const item = DATA[idx];
     if (!item) return;
     setSheetItem(item);
-    const kind = item.kind;
-    const numOnly = item.num.replace(/[^0-9]/g, "");
-    window.history.pushState({ idx }, "", `?${kind}=${numOnly}`);
   }, []);
 
   const closeSheet = useCallback(() => {
     setSheetItem(null);
-    if (window.location.search) {
-      window.history.replaceState({}, "", window.location.pathname);
-    }
   }, []);
 
+  // Deeplink (?si=03 / ?ex=02) opens the matching project on load.
   useEffect(() => {
     const si = searchParams.get("si");
     const ex = searchParams.get("ex");
@@ -46,12 +43,10 @@ function PortfolioApp() {
       ? `SI / ${si.padStart(2, "0")}`
       : `EX / ${ex!.padStart(2, "0")}`;
     const idx = DATA.findIndex((d) => d.num === targetNum);
-    if (idx >= 0) {
-      setActiveFilter("all");
-      setSheetItem(DATA[idx]);
-    }
+    if (idx >= 0) setSheetItem(DATA[idx]);
   }, [searchParams]);
 
+  // Back/forward navigation.
   useEffect(() => {
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
@@ -71,23 +66,26 @@ function PortfolioApp() {
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
+  // The command palette dispatches this on the "/" shortcut.
+  useEffect(() => {
+    const open = () => setPaletteOpen(true);
+    window.addEventListener("open-palette", open);
+    return () => window.removeEventListener("open-palette", open);
+  }, []);
+
   return (
     <>
       <ScrollProgress />
-      <Header
-        onOpenPalette={() => setPaletteOpen(true)}
-        onOpenSheet={openSheet}
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-      />
+      <Header onOpenPalette={() => setPaletteOpen(true)} />
       <main>
-        <Hero onOpenSheet={openSheet} />
+        <Hero />
         <About />
-        <WorkGrid activeFilter={activeFilter} onOpenSheet={openSheet} />
+        <WorkIndex onOpenSheet={openSheet} />
         <Timeline onOpenSheet={openSheet} />
         <Contact />
       </main>
       <Footer />
+      <TweakPanel />
       <CommandPalette
         isOpen={paletteOpen}
         onClose={() => setPaletteOpen(false)}
@@ -97,6 +95,7 @@ function PortfolioApp() {
         }}
       />
       <ProjectSheet item={sheetItem} onClose={closeSheet} onNavigate={openSheet} />
+      <MotionEffects />
     </>
   );
 }
@@ -104,9 +103,11 @@ function PortfolioApp() {
 export default function Home() {
   return (
     <ThemeProvider>
-      <Suspense>
-        <PortfolioApp />
-      </Suspense>
+      <SettingsProvider>
+        <Suspense>
+          <PortfolioApp />
+        </Suspense>
+      </SettingsProvider>
     </ThemeProvider>
   );
 }

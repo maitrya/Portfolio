@@ -1,12 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export default function Footer() {
-  const year = new Date().getFullYear();
+  const [year, setYear] = useState(2026);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer>
-      <span>&copy; {year} Maitrya Anupam</span>
-      <a href="mailto:maitryainfinity@gmail.com">maitryainfinity@gmail.com</a>
+      <div>&copy; {year} Maitrya Anupam</div>
+      <div>
+        <a href="mailto:maitryainfinity@gmail.com">maitryainfinity@gmail.com</a>
+      </div>
     </footer>
   );
 }

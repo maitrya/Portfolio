@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useCallback, useState, Suspense } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { DATA } from "@/lib/data";
@@ -13,6 +12,16 @@ interface ProjectSheetProps {
   onClose: () => void;
   onNavigate?: (idx: number) => void;
 }
+
+const DOMAIN: Record<string, string> = {
+  modelling: "Modelling & valuation",
+  wealth: "Corp finance & wealth",
+  derivatives: "Derivatives & risk",
+  alternatives: "Alternatives & ESG",
+  frameworks: "Frameworks",
+  ai: "Applied AI",
+  experience: "Experience",
+};
 
 const backdropVariants = {
   hidden: { opacity: 0 },
@@ -26,18 +35,12 @@ const sheetVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as const },
   },
-  exit: {
-    opacity: 0,
-    y: 20,
-    scale: 0.98,
-    transition: { duration: 0.2 },
-  },
+  exit: { opacity: 0, y: 20, scale: 0.98, transition: { duration: 0.18 } },
 };
 
 function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
-  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const itemIdx = item ? DATA.indexOf(item) : -1;
@@ -50,34 +53,33 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
     onNavigate((itemIdx + 1) % DATA.length);
   }, [itemIdx, onNavigate]);
 
-  // Update URL when opening a sheet
+  // Sync URL to the open project using native history (Next's router.replace
+  // resets scroll; replaceState does not). Keeps links shareable + deeplinkable.
   useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("si");
+    url.searchParams.delete("ex");
     if (item) {
-      const paramKey = item.kind === "si" ? "si" : "ex";
-      const paramVal = item.num.split(" / ")[1];
-      const url = new URL(window.location.href);
-      // Clear both params first
-      url.searchParams.delete("si");
-      url.searchParams.delete("ex");
-      url.searchParams.set(paramKey, paramVal);
-      router.replace(url.pathname + url.search, { scroll: false });
-      document.body.classList.add("scroll-locked");
-    } else {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("si");
-      url.searchParams.delete("ex");
-      const clean = url.searchParams.toString()
-        ? `${url.pathname}?${url.searchParams.toString()}`
-        : url.pathname;
-      router.replace(clean, { scroll: false });
-      document.body.classList.remove("scroll-locked");
+      url.searchParams.set(item.kind === "si" ? "si" : "ex", item.num.split(" / ")[1]);
     }
+    const qs = url.searchParams.toString();
+    window.history.replaceState(null, "", qs ? `${url.pathname}?${qs}` : url.pathname);
+  }, [item]);
+
+  // Lock scroll while open via overflow:hidden (keeps the scroll position in
+  // place — no jump — unlike position:fixed).
+  const isOpen = item !== null;
+  useEffect(() => {
+    if (!isOpen) return;
+    document.documentElement.classList.add("scroll-locked");
+    document.body.classList.add("scroll-locked");
     return () => {
+      document.documentElement.classList.remove("scroll-locked");
       document.body.classList.remove("scroll-locked");
     };
-  }, [item, router]);
+  }, [isOpen]);
 
-  // Close on Escape, browse with arrow keys
+  // Escape closes, arrows browse
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -94,25 +96,21 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1800);
     } catch {
-      // Fallback
-      const input = document.createElement("input");
-      input.value = window.location.href;
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand("copy");
-      document.body.removeChild(input);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1800);
     }
   }, []);
+
+  const numShort = item ? item.num.replace(/^(SI|EX) \/ /, "") : "";
 
   return (
     <AnimatePresence>
       {item && (
         <motion.div
-          className="sheet-bg"
+          className="sheet-bg open"
+          style={{ display: "flex" }}
           variants={backdropVariants}
           initial="hidden"
           animate="visible"
@@ -129,38 +127,42 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
             exit="exit"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Image panel */}
-            {item.thumb ? (
-              <div className="sheet-img">
-                <img src={item.thumb} alt={item.title} />
-              </div>
-            ) : (
-              <div className="sheet-img placeholder">
-                <span>{item.num.split(" / ")[1]}</span>
-              </div>
-            )}
+            <button className="sheet-close" onClick={onClose} aria-label="Close">
+              &times;
+            </button>
 
-            {/* Body panel */}
+            <div className="sheet-side">
+              <div className="big">{numShort}</div>
+              <div className="dom">{DOMAIN[item.cat] ?? "Experience"}</div>
+            </div>
+
             <div className="sheet-body">
               <div className="sheet-num">
                 {item.num} &middot; {item.year}
               </div>
               <h3>{item.title}</h3>
               <div className="org">{item.org}</div>
+
+              {item.thumb && (
+                <figure className="sheet-fig">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={item.thumb} alt={item.title} loading="lazy" />
+                  <figcaption>Exhibit &middot; {DOMAIN[item.cat]}</figcaption>
+                </figure>
+              )}
+
               <p className="desc">{item.desc}</p>
 
-              {/* Extras */}
               {item.extras && item.extras.length > 0 && (
                 <ul className="components">
                   {item.extras.map((extra) => (
                     <li key={extra.label}>
-                      <strong>{extra.label}:</strong> {extra.text}
+                      <strong>{extra.label}.</strong> {extra.text}
                     </li>
                   ))}
                 </ul>
               )}
 
-              {/* Links */}
               {item.links && item.links.length > 0 && (
                 <div className="sheet-links">
                   {item.links.map((link) => (
@@ -170,13 +172,12 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noopener noreferrer" : undefined}
                     >
-                      {link.label}
+                      {link.label} &rarr;
                     </a>
                   ))}
                 </div>
               )}
 
-              {/* Tags */}
               <div className="tags">
                 {item.tags.map((tag) => (
                   <span key={tag} className="tag">
@@ -185,31 +186,21 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
                 ))}
               </div>
 
-              {/* Full case study */}
-              <Link href={`/work/${getSlug(item)}`} className="sheet-case-link">
-                Open full case study <span className="arr">&rarr;</span>
-              </Link>
-
-              {/* Share */}
-              <button className="sheet-share" onClick={handleShare}>
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M6 9.5l4-3M4.5 6.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM11.5 13.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM11.5 6.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM6 9.5l4 3" />
-                </svg>
-                {copied ? "Link copied!" : "Share"}
-              </button>
+              <div>
+                <Link href={`/work/${getSlug(item)}`} className="sheet-case-link">
+                  Open full case study <span className="arr">&rarr;</span>
+                </Link>
+                <button className="sheet-share" onClick={handleShare}>
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                    <polyline points="16 6 12 2 8 6" />
+                    <line x1="12" y1="2" x2="12" y2="15" />
+                  </svg>
+                  {copied ? "Copied" : "Copy link"}
+                </button>
+              </div>
             </div>
 
-            {/* Close button */}
-            <button className="sheet-close" onClick={onClose} aria-label="Close">
-              &times;
-            </button>
-
-            {/* Prev / next browsing */}
             {onNavigate && itemIdx >= 0 && (
               <div className="sheet-nav">
                 <button onClick={goPrev} aria-label="Previous project">
