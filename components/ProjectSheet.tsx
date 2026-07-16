@@ -169,8 +169,8 @@ function ProjectSheetInner({ item, onClose, onNavigate }: ProjectSheetProps) {
                     <a
                       key={link.href}
                       href={link.href}
-                      target={link.external ? "_blank" : undefined}
-                      rel={link.external ? "noopener noreferrer" : undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {link.label} &rarr;
                     </a>

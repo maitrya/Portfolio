@@ -134,9 +134,8 @@ export default async function CaseStudyPage({
                   key={link.href}
                   href={link.href}
                   className="btn"
-                  {...(link.external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {link.label} <span className="arr">&rarr;</span>
                 </a>
