@@ -514,6 +514,13 @@
 @media (max-width:680px){ .sheet-nav{ bottom:auto; top:14px; left:14px; transform:none; } }
 /* SVG stat posters show whole, not cropped */
 .sheet-fig img { object-fit:contain !important; max-height:340px; background:#17160f; }
+/* Let the sheet body scroll inside the two-column grid on desktop. A grid
+   item won't shrink below its content (min-height:auto) so overflow-y:auto
+   never engages — min-height:0 + a bound fixes it. Mobile scrolls the whole
+   sheet, so scope this to desktop. */
+@media (min-width:681px){
+  .sheet-body { min-height:0; max-height:88vh; }
+}
 
 /* ---- DCF sensitivity widget (self-contained dark card) ---- */
 .dcf-widget { --dcf-bg:#1b1b15; --dcf-ink:#f3efe3; --dcf-ink-muted:#b3b0a4; --dcf-ink-soft:#7c7a6f; --dcf-line:rgba(255,255,255,0.10); --dcf-accent:#d4a847; background:var(--dcf-bg); color:var(--dcf-ink); border:1px solid var(--dcf-line); border-radius:var(--radius); padding:clamp(20px,3.5vw,32px); margin:0 0 36px; }
